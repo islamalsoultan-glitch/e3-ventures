@@ -5083,12 +5083,97 @@ html {
     ) !important;
 }
 
-/* Orange primary buttons use white labels for stronger contrast */
-.button.primary,
-.button.primary:hover,
-.header-cta,
-.header-cta:hover {
-  color: #fff !important;
+/* Accelerator visual readability pass */
+.primary-nav a.active,
+.primary-nav a[aria-current],
+.mobile-nav a.active,
+.mobile-nav a[aria-current] {
+  font-weight: 700;
+}
+
+.accelerator-panel {
+  align-content: center !important;
+  gap: clamp(12px, 1.5vw, 18px) !important;
+  padding: clamp(8px, 1.2vw, 14px) 0 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.accelerator-panel .panel-visual-bg {
+  width: 100%;
+  min-height: clamp(300px, 33vw, 420px);
+}
+
+.accelerator-panel .acceleration-chart-container {
+  width: min(100%, clamp(360px, 40vw, 530px)) !important;
+  max-width: 100%;
+}
+
+.accelerator-panel .acceleration-chart-svg {
+  filter: drop-shadow(0 26px 44px rgba(0, 0, 0, 0.2));
+}
+
+.accelerator-panel .line-end-label text,
+.accelerator-panel .e3-gateway text,
+.accelerator-panel .acceleration-chart-svg text {
+  font-weight: 800;
+  text-rendering: geometricPrecision;
+}
+
+.accelerator-panel .line-end-label text {
+  font-size: 10.5px !important;
+  letter-spacing: 0.08em !important;
+}
+
+.accelerator-panel .e3-gateway text {
+  font-size: 8.2px !important;
+  letter-spacing: 0.2em !important;
+}
+
+.accelerator-panel .accelerator-facts-tags {
+  display: flex;
+  flex-wrap: nowrap !important;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(8px, 1.1vw, 12px);
+  width: 100%;
+  margin-top: 0 !important;
+}
+
+.accelerator-panel .fact-tag {
+  flex: 0 0 auto !important;
+  min-height: 42px;
+  padding: 9px clamp(14px, 1.6vw, 18px);
+  font-size: clamp(13px, 1.05vw, 15px);
+}
+
+.accelerator-panel .fact-icon {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 767px) {
+  .accelerator-panel .panel-visual-bg {
+    min-height: clamp(260px, 78vw, 360px);
+  }
+
+  .accelerator-panel .acceleration-chart-container {
+    width: min(100%, 430px) !important;
+  }
+
+  .accelerator-panel .accelerator-facts-tags {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .accelerator-panel .accelerator-facts-tags::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
