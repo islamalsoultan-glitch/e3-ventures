@@ -5038,6 +5038,51 @@ html {
   content: none !important;
 }
 
+/* Hero-to-accelerator edge: identical tone at the physical touch point */
+.hero-shade {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(3, 7, 43, 0.2) 0%,
+      rgba(5, 13, 45, 0.74) 54%,
+      var(--tone-accelerator) 88%,
+      var(--tone-accelerator) 100%
+    ),
+    linear-gradient(90deg, rgba(3, 7, 43, 0.86), rgba(3, 7, 43, 0.42) 46%, rgba(3, 7, 43, 0.78));
+}
+
+.home-hero::after {
+  bottom: 0;
+  height: clamp(340px, 34vw, 560px);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(6, 16, 58, 0) 0%,
+      rgba(6, 16, 58, 0.5) 36%,
+      var(--tone-accelerator) 76%,
+      var(--tone-accelerator) 100%
+    );
+}
+
+.accelerator-promo {
+  margin-top: 0 !important;
+  padding-top: clamp(88px, 9vw, 132px) !important;
+  background:
+    radial-gradient(ellipse at 18% 38%, rgba(59, 214, 198, 0.045), transparent 32%),
+    radial-gradient(ellipse at 82% 62%, rgba(254, 150, 2, 0.04), transparent 28%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.1) 0 0.8px, transparent 1.5px) 8px 54px / 190px 210px,
+    radial-gradient(circle, rgba(59, 214, 198, 0.11) 0 1px, transparent 1.9px) 90px 96px / 310px 270px,
+    radial-gradient(circle, rgba(254, 150, 2, 0.08) 0 0.9px, transparent 1.8px) 150px 168px / 380px 320px,
+    linear-gradient(
+      180deg,
+      var(--tone-accelerator) 0%,
+      var(--tone-accelerator) 18%,
+      #071747 48%,
+      #07184a 76%,
+      var(--tone-portfolio) 100%
+    ) !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
