@@ -5083,6 +5083,14 @@ html {
     ) !important;
 }
 
+/* Orange primary buttons use white labels for stronger contrast */
+.button.primary,
+.button.primary:hover,
+.header-cta,
+.header-cta:hover {
+  color: #fff !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
