@@ -3,18 +3,151 @@ const mobileNav = document.querySelector(".mobile-nav");
 const header = document.querySelector(".site-header");
 const progressBar = document.querySelector(".scroll-progress span");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const navLinks = Array.from(document.querySelectorAll(".primary-nav a[href^='#'], .mobile-nav a[href^='#']"));
+const internalLinks = Array.from(document.querySelectorAll("a[href^='#']"));
+let navTargets = [];
+
+const setActiveNav = (hash) => {
+  navLinks.forEach((link) => {
+    const isActive = link.getAttribute("href") === hash;
+    link.classList.toggle("active", isActive);
+
+    if (isActive) {
+      link.setAttribute("aria-current", "location");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+};
+
+const getHeaderOffset = () => {
+  if (!header) {
+    return 112;
+  }
+
+  return header.getBoundingClientRect().height;
+};
+
+const closeMobileNav = () => {
+  if (!mobileNav || !toggle) {
+    return;
+  }
+
+  mobileNav.classList.remove("open");
+  mobileNav.setAttribute("aria-hidden", "true");
+  toggle.setAttribute("aria-expanded", "false");
+};
+
+const openMobileNav = () => {
+  if (!mobileNav || !toggle) {
+    return;
+  }
+
+  mobileNav.classList.add("open");
+  mobileNav.setAttribute("aria-hidden", "false");
+  toggle.setAttribute("aria-expanded", "true");
+};
+
+const syncActiveNav = () => {
+  if (!navTargets.length) {
+    return;
+  }
+
+  const marker = window.scrollY + getHeaderOffset();
+  let activeHash = navTargets[0].hash;
+
+  navTargets.forEach(({ hash, section }) => {
+    if (section.offsetTop <= marker) {
+      activeHash = hash;
+    }
+  });
+
+  const pageBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 6;
+
+  if (pageBottom) {
+    const contactTarget = navTargets.find((target) => target.hash === "#contact");
+    if (contactTarget) {
+      activeHash = contactTarget.hash;
+    }
+  }
+
+  setActiveNav(activeHash);
+};
+
+if (navLinks.length) {
+  const seenTargets = new Set();
+
+  navTargets = navLinks.reduce((targets, link) => {
+    const hash = link.getAttribute("href");
+    const section = hash && document.querySelector(hash);
+
+    if (!section || seenTargets.has(hash)) {
+      return targets;
+    }
+
+    seenTargets.add(hash);
+    targets.push({ hash, section });
+    return targets;
+  }, []);
+
+  navTargets.sort((a, b) => a.section.offsetTop - b.section.offsetTop);
+}
+
+internalLinks.forEach((link) => {
+  const hash = link.getAttribute("href");
+  const section = hash && hash.length > 1 ? document.querySelector(hash) : null;
+
+  if (!section) {
+    return;
+  }
+
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    const scrollBehavior = prefersReducedMotion.matches ? "auto" : "smooth";
+
+    section.scrollIntoView({
+      behavior: scrollBehavior,
+      block: "start",
+    });
+
+    if (window.location.hash !== hash) {
+      history.pushState(null, "", hash);
+    }
+
+    setActiveNav(hash);
+    closeMobileNav();
+  });
+});
+
+window.addEventListener("hashchange", () => {
+  if (window.location.hash) {
+    setActiveNav(window.location.hash);
+  }
+});
+
+if (window.location.hash && document.querySelector(window.location.hash)) {
+  setActiveNav(window.location.hash);
+}
 
 if (toggle && mobileNav) {
   toggle.addEventListener("click", () => {
-    const isOpen = mobileNav.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", String(isOpen));
+    if (mobileNav.classList.contains("open")) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
   });
 
   mobileNav.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
-      mobileNav.classList.remove("open");
-      toggle.setAttribute("aria-expanded", "false");
+      closeMobileNav();
     });
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMobileNav();
+    }
   });
 }
 
@@ -36,6 +169,7 @@ const syncScrollProgress = () => {
   }
 
   syncHeaderState();
+  syncActiveNav();
   scrollTicking = false;
 };
 
